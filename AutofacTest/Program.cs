@@ -1,7 +1,7 @@
-﻿using Autofac.Extensions.DependencyInjection;
+﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using AutofacTest;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
@@ -11,15 +11,11 @@ await Host.CreateDefaultBuilder(args)
         config.AddEnvironmentVariables();
         config.AddUserSecrets<Program>();
     })
-    .UseSerilog((context, config) =>
+    .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+    .UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration))
+    .ConfigureContainer<ContainerBuilder>(builder =>
     {
-        config.WriteTo.Console();
-    })
-    .ConfigureServices((context, services) =>
-    {
-        services
-            .AddAutofac()
-            .AddHostedService<Startup>();
+        builder.RegisterType<Startup>().As<IHostedService>().SingleInstance();
     })
     .Build()
     .RunAsync();
