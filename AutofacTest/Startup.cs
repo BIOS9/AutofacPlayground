@@ -1,6 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Autofac;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Core;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace AutofacTest;
 
@@ -9,9 +13,8 @@ public class Startup : IHostedService
     private readonly IConfiguration _configuration;
     private readonly ILogger<Startup> _logger;
     
-    public Startup(IConfiguration configuration, ILogger<Startup> logger)
+    public Startup(ILogger<Startup> logger)
     {
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     
