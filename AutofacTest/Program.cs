@@ -17,13 +17,9 @@ await Host.CreateDefaultBuilder(args)
     .UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration))
     .ConfigureContainer<ContainerBuilder>((context, builder) =>
     {
-
-        IConfigurationSection s1Options = context.Configuration.GetExistingSectionOrThrow(Service1Options.Name);
-        
-        builder.RegisterType<Service1>().AsSelf().As<IHostedService>().SingleInstance().PropertiesAutowired();
+        builder.RegisterModule(new Service1Module(context.Configuration));
         builder.RegisterType<Service2>().PropertiesAutowired();
         builder.RegisterType<Service3>().As<IHostedService>().SingleInstance().PropertiesAutowired();
-        builder.ConfigureWithValidation<Service1Options>(s1Options);
     })
     .Build()
     .RunAsync();
