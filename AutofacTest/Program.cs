@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using AutofacTest.Helpers;
 using AutofacTest.Services;
 using AutofacTest.Services.ServiceOne;
 using Microsoft.Extensions.Configuration;
